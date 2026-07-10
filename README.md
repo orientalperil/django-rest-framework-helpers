@@ -1,7 +1,7 @@
-# drf-helpers
+# django-rest-framework-helpers
 
 Django REST Framework helpers
 
-`import { FormKitSubmitter } from 'drf-helpers/submitters/formkit'`
+`import { FormKitSubmitter } from 'django-rest-framework-helpers/submitters/formkit'`
 
-`import { fetchAll } from 'drf-helpers/pagination'`
+`import { fetchAll } from 'django-rest-framework-helpers/pagination'`

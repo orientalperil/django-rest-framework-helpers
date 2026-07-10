@@ -1,7 +1,7 @@
 {
-  "name": "drf-helpers",
+  "name": "django-rest-framework-helpers",
   "version": "0.1.0",
-  "homepage": "https://github.com/orientalperil/drf-helpers",
+  "homepage": "https://github.com/orientalperil/django-rest-framework-helpers",
   "type": "module",
   "exports": {
     "./*": {
