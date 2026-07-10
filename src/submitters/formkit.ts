@@ -15,9 +15,8 @@
  * `messageBag.prepend` handled top-level messages and per-element message bags
  * handled field messages.
  */
-import type { FormKitNode } from '@formkit/core'
-
-import { parseDrfError } from './parseDrfError.js'
+import { parseDrfError } from "./parseDrfError.js"
+import type { FormKitNode } from "@formkit/core"
 
 export class FormKitSubmitter<TData = Record<string, unknown>> {
   node: FormKitNode | undefined
