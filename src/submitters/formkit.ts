@@ -18,7 +18,7 @@
 import { parseDrfError } from "./parseDrfError.js"
 import type { FormKitNode } from "@formkit/core"
 
-export class FormKitSubmitter<TData = Record<string, unknown>> {
+export abstract class FormKitSubmitter<TData = Record<string, unknown>> {
   constructor() {
     this.submit = this.submit.bind(this)
   }
@@ -54,5 +54,20 @@ export class FormKitSubmitter<TData = Record<string, unknown>> {
     } finally {
       await this.finally()
     }
+  }
+}
+
+/**
+ * FormKitSubmitter tailored to hey-api's generated SDK.
+ *
+ * With `throwOnError`, the SDK throws the parsed response *body* directly,
+ * whereas `FormKitSubmitter.handleError` → `parseDrfError` normalizes an
+ * axios-style error (`error.response.data`). Re-wrap the thrown body so the DRF
+ * parser maps `detail` / `non_field_errors` to the form and field errors to
+ * their inputs.
+ */
+export abstract class HeyApiFormKitSubmitter<TData> extends FormKitSubmitter<TData> {
+  override handleError(error: unknown, node: FormKitNode) {
+    super.handleError({ response: { data: error } }, node)
   }
 }
