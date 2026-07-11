@@ -19,23 +19,16 @@ import { parseDrfError } from "./parseDrfError.js"
 import type { FormKitNode } from "@formkit/core"
 
 export class FormKitSubmitter<TData = Record<string, unknown>> {
-  node: FormKitNode | undefined
-
-  constructor(node: FormKitNode | undefined) {
-    this.node = node
+  constructor() {
     this.submit = this.submit.bind(this)
   }
 
-  setNode(node: FormKitNode | undefined) {
-    this.node = node
-  }
-
-  handleError(error: unknown) {
+  handleError(error: unknown, node: FormKitNode) {
     // Normalized `fields` are keyed by dotted paths, which already match
     // FormKit's group/nested input names. Single call sets both buckets;
     // FormKit clears them automatically when the user edits the offending field.
     const { formLevel, fields } = parseDrfError(error)
-    this.node?.setErrors(formLevel, fields)
+    node.setErrors(formLevel, fields)
   }
 
   async action(_data: TData): Promise<void> {}
@@ -50,14 +43,13 @@ export class FormKitSubmitter<TData = Record<string, unknown>> {
    * loading/disabled state for the duration of the returned promise, and passes
    * (data, node).
    */
-  async submit(data: TData, node?: FormKitNode) {
-    if (node) this.node = node
-    this.node?.clearErrors()
+  async submit(data: TData, node: FormKitNode) {
+    node.clearErrors()
     try {
       await this.action(data)
       await this.success(data)
     } catch (error) {
-      this.handleError(error)
+      this.handleError(error, node)
       await this.error(error)
     } finally {
       await this.finally()
